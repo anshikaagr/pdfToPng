@@ -55,7 +55,7 @@ CMD gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 2 --timeout 120 main:app
 | Flag | Reason |
 |---|---|
 | `--bind 0.0.0.0:${PORT:-5000}` | Uses Render's `PORT` env var, falls back to 5000 |
-| `--workers 2` | Concurrent request handling without over-provisioning |
+| `--workers 1` | Essential for Free Tier (512MB RAM) to avoid OOM hangs |
 | `--timeout 120` | Allows long-running PDF conversion tasks to complete |
 | `main:app` | Points Gunicorn to the `app` object in `main.py` |
 
@@ -100,7 +100,7 @@ A `render.yaml` Blueprint file was added to enable one-click deployment of both 
 | **Root Directory** | `backend` |
 | **Runtime** | `Python` |
 | **Build Command** | `pip install -r requirements.txt` |
-| **Start Command** | `gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 2 --timeout 120 main:app` |
+| **Start Command** | `gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --timeout 120 main:app` |
 
 4. Add Environment Variables:
 
@@ -160,7 +160,7 @@ The port binds **immediately** — no scanner timeout.
 
 ## ⚡ Why Gunicorn over Flask's Dev Server?
 
-Gunicorn is a production-grade WSGI server that binds to the port instantly on startup, unlike Flask's dev server which performs additional setup steps before accepting connections. Gunicorn also supports multiple workers for concurrent request handling, which is essential for a PDF-processing service where each conversion can be CPU-intensive and slow.
+Gunicorn is a production-grade WSGI server that binds to the port instantly on startup. For this deployment, we use **1 worker** to stay within the 512MB RAM limit mandated by Render's free tier, as the image-processing libraries (ONNX, NumPy) are memory-intensive.
 
 ---
 

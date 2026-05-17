@@ -21,7 +21,7 @@ The Flask backend fails to deploy on Render because the `backend/Dockerfile` sta
   CMD ["python", "main.py"]
 
   # After
-  CMD gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 2 --timeout 120 main:app
+  CMD gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --timeout 120 main:app
   ```
   Gunicorn was already listed in `requirements.txt` (`gunicorn==23.0.0`) — this is a zero-dependency fix.
 
