@@ -38,7 +38,6 @@ export const useFileUpload = (validateFile) => {
   const processFile = useCallback(async (selectedFile) => {
     if (!selectedFile) return;
 
-<<<<<<< HEAD
     // 10MB limit
     const MAX_SIZE = 10 * 1024 * 1024;
     if (selectedFile.size > MAX_SIZE) {
@@ -48,9 +47,6 @@ export const useFileUpload = (validateFile) => {
     }
 
     const validation = validateFile(selectedFile);
-=======
-    const validation = await validateFile(selectedFile);
->>>>>>> upstream/main
     if (validation.isValid) {
       setFile(selectedFile);
       if (selectedFile.type.startsWith("image/")) {
