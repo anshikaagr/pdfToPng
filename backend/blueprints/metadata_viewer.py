@@ -1,12 +1,11 @@
 import os
 from io import BytesIO
 
-import piexif
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify
 from PIL import Image, ExifTags
-from werkzeug.utils import secure_filename
 
-from utils.helpers import error, send_file_and_cleanup
+from utils.decorators import process_image_request
+from utils.helpers import send_file_and_cleanup
 
 metadata_bp = Blueprint("metadata", __name__)
 
@@ -279,72 +278,46 @@ def _extract_metadata(img, file_bytes, filename):
 # ── routes ────────────────────────────────────────────────────────────────────
 
 @metadata_bp.route("/view-metadata", methods=["POST"])
-def view_metadata():
-    if "image" not in request.files:
-        return error("No image provided")
-    file = request.files["image"]
-    if not file.filename:
-        return error("No file selected")
-    try:
-        file_bytes = file.read()
-        img = Image.open(BytesIO(file_bytes))
-        img.load()
-        filename = secure_filename(file.filename)
-        metadata = _extract_metadata(img, file_bytes, filename)
-        img.close()
-        return jsonify({"metadata": metadata})
-    except Exception as e:
-        return error(f"Failed to read metadata: {str(e)}", 500)
+@process_image_request
+def view_metadata(img, filename, file_bytes):
+    img.load()
+    metadata = _extract_metadata(img, file_bytes, filename)
+    return jsonify({"metadata": metadata})
 
 
 @metadata_bp.route("/strip-metadata", methods=["POST"])
-def strip_metadata():
-    if "image" not in request.files:
-        return error("No image provided")
-    file = request.files["image"]
-    if not file.filename:
-        return error("No file selected")
+@process_image_request
+def strip_metadata(img, filename, file_bytes):
+    ext = os.path.splitext(filename)[1].lower()
+    img.load()
+    buf = BytesIO()
 
-    img = None
-    try:
-        filename   = secure_filename(file.filename)
-        ext        = os.path.splitext(filename)[1].lower()
-        file_bytes = file.read()
-        img = Image.open(BytesIO(file_bytes))
-        img.load()
-        buf = BytesIO()
+    if ext in (".jpg", ".jpeg"):
+        clean = img.convert("RGB") if img.mode != "RGB" else img
+        clean.save(buf, format="JPEG", quality=95, subsampling=0)
+        mimetype, out_ext = "image/jpeg", ".jpg"
+    elif ext == ".png":
+        clean = Image.new(img.mode, img.size)
+        clean.putdata(list(img.getdata()))
+        clean.save(buf, format="PNG")
+        mimetype, out_ext = "image/png", ".png"
+    elif ext in (".tiff", ".tif"):
+        img.save(buf, format="TIFF")
+        mimetype, out_ext = "image/tiff", ".tiff"
+    elif ext == ".bmp":
+        img.save(buf, format="BMP")
+        mimetype, out_ext = "image/bmp", ".bmp"
+    elif ext == ".webp":
+        img.save(buf, format="WEBP", quality=95)
+        mimetype, out_ext = "image/webp", ".webp"
+    else:
+        raise ValueError("Unsupported file format")
 
-        if ext in (".jpg", ".jpeg"):
-            clean = img.convert("RGB") if img.mode != "RGB" else img
-            clean.save(buf, format="JPEG", quality=95, subsampling=0)
-            mimetype, out_ext = "image/jpeg", ".jpg"
-        elif ext == ".png":
-            clean = Image.new(img.mode, img.size)
-            clean.putdata(list(img.getdata()))
-            clean.save(buf, format="PNG")
-            mimetype, out_ext = "image/png", ".png"
-        elif ext in (".tiff", ".tif"):
-            img.save(buf, format="TIFF")
-            mimetype, out_ext = "image/tiff", ".tiff"
-        elif ext == ".bmp":
-            img.save(buf, format="BMP")
-            mimetype, out_ext = "image/bmp", ".bmp"
-        elif ext == ".webp":
-            img.save(buf, format="WEBP", quality=95)
-            mimetype, out_ext = "image/webp", ".webp"
-        else:
-            return error("Unsupported file format")
-
-        buf.seek(0)
-        base = os.path.splitext(filename)[0]
-        return send_file_and_cleanup(
-            buf.getvalue(),
-            mimetype=mimetype,
-            as_attachment=True,
-            download_name=f"{base}_stripped{out_ext}",
-        )
-    except Exception as e:
-        return error(f"Failed to strip metadata: {str(e)}", 500)
-    finally:
-        if img:
-            img.close()
+    buf.seek(0)
+    base = os.path.splitext(filename)[0]
+    return send_file_and_cleanup(
+        buf.getvalue(),
+        mimetype=mimetype,
+        as_attachment=True,
+        download_name=f"{base}_stripped{out_ext}",
+    )
