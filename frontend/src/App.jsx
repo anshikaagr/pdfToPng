@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import ScrollToTop from "./components/ScrollToTop";
 
 import PdfMerge from "./pages/PdfMerge";
 import PdfSign from "./pages/PdfSign";
@@ -26,6 +27,7 @@ import ErrorBoundary from "./ErrorBoundary";
 function App() {
   return (
     <ErrorBoundary>
+      <ScrollToTop />
       <Routes>
         {/* The Landing Page has its own clean view */}
         <Route path="/" element={<LandingPage />} />
