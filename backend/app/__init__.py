@@ -51,16 +51,22 @@ def create_app():
     
     from blueprints.pdf import pdf_bp
     from blueprints.pdf_to_docx import pdf_docx_bp
+    from blueprints.docx_to_pdf import docx_pdf_bp
     from blueprints.image import image_bp
     from blueprints.removebg import remove_bp
     from blueprints.rotate_flip import rotate_flip_bp
     from blueprints.dpi_converter import dpi_bp
     from blueprints.metadata_viewer import metadata_bp
+    from blueprints.watermark import watermark_bp
+    from blueprints.merge_pdf import merge_pdf_bp   
     app.register_blueprint(pdf_bp)
     app.register_blueprint(pdf_docx_bp)
+    app.register_blueprint(docx_pdf_bp)
     app.register_blueprint(image_bp)
     app.register_blueprint(remove_bp)
     app.register_blueprint(rotate_flip_bp)
     app.register_blueprint(dpi_bp)
     app.register_blueprint(metadata_bp)
+    app.register_blueprint(watermark_bp)
+    app.register_blueprint(merge_pdf_bp)      
     return app
