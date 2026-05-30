@@ -341,3 +341,27 @@
   stroke-dasharray: 120;
   stroke-dashoffset: 120;
 }
+
+/* PDF Split */
+.tc-pdf-split-scene { animation: tc-float 2.4s ease-in-out infinite; }
+.group:hover .tc-pdf-split-scene { animation: none; }
+
+/* PDF Watermark */
+.tc-pdf-watermark-scene { animation: tc-float 2.4s ease-in-out infinite; }
+.group:hover .tc-pdf-watermark-scene { animation: none; }
+
+/* Image Watermark */
+.tc-image-watermark-scene { animation: tc-float 2.4s ease-in-out infinite; }
+.group:hover .tc-image-watermark-scene { animation: none; }
+
+/* Image OCR */
+.tc-image-ocr-scene { animation: tc-float 2.4s ease-in-out infinite; }
+.group:hover .tc-image-ocr-scene { animation: none; }
+
+/* DOCX to PDF */
+.tc-docx-pdf-scene { animation: tc-float 2.4s ease-in-out infinite; }
+.group:hover .tc-docx-pdf-scene { animation: none; }
+
+/* Image to SVG */
+.tc-image-svg-scene { animation: tc-float 2.4s ease-in-out infinite; }
+.group:hover .tc-image-svg-scene { animation: none; }

@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import "./ToolCard.css";
 
 const pdfWatermarkAnimation = (
-  <div className="tc-scene flex items-center justify-center">
+  <div className="tc-scene tc-pdf-watermark-scene flex items-center justify-center">
     <div className="relative w-[58px] h-[50px]">
       <div className="absolute left-1/2 top-1/2 w-[34px] h-[42px] -translate-x-1/2 -translate-y-1/2 rounded-[4px] bg-[#FFF8F5] border border-[#F0997B] overflow-hidden">
         <div className="absolute top-[8px] left-[5px] right-[5px] h-[2px] rounded-full bg-[#D85A30] opacity-60" />
@@ -21,7 +21,7 @@ const pdfWatermarkAnimation = (
 );
 
 const imageWatermarkAnimation = (
-  <div className="tc-scene flex items-center justify-center">
+  <div className="tc-scene tc-image-watermark-scene flex items-center justify-center">
     <div className="relative w-[58px] h-[50px]">
       <div className="absolute left-1/2 top-1/2 w-[36px] h-[36px] -translate-x-1/2 -translate-y-1/2 rounded-[4px] bg-[#FAFCFF] border border-[#85B7EB] overflow-hidden">
         <div className="absolute top-[6px] right-[6px] w-[8px] h-[8px] rounded-full bg-[#EF9F27]" />
@@ -41,7 +41,7 @@ const imageWatermarkAnimation = (
 );
 
 const imageOcrAnimation = (
-  <div className="tc-scene flex items-center justify-center">
+  <div className="tc-scene tc-image-ocr-scene flex items-center justify-center">
     <div className="relative w-[60px] h-[48px]">
       <div className="absolute inset-0 rounded-[6px] bg-[#E6F1FB] border border-[#85B7EB]" />
 
@@ -68,7 +68,7 @@ const imageOcrAnimation = (
 );
 
 const pdfSplitAnimation = (
-  <div className="tc-scene flex items-center justify-center">
+  <div className="tc-scene tc-pdf-split-scene flex items-center justify-center">
     <div className="relative w-[70px] h-[54px]">
       <div className="absolute left-1/2 top-1/2 w-[30px] h-[40px] -translate-x-1/2 -translate-y-1/2 rounded-[4px] bg-[#FFF8F5] border border-[#F0997B] shadow-sm group-hover:opacity-0 transition-all duration-300">
         <div className="absolute top-[8px] left-[5px] right-[5px] h-[2px] rounded-full bg-[#D85A30] opacity-70" />
@@ -95,7 +95,7 @@ const pdfSplitAnimation = (
 );
 
 const docToPdfAnimation = (
-  <div className="tc-scene flex items-center justify-center">
+  <div className="tc-scene tc-docx-pdf-scene flex items-center justify-center">
     <div className="relative w-[70px] h-[52px]">
 
       {/* DOCX */}
@@ -118,7 +118,7 @@ const docToPdfAnimation = (
 );
 
 const imageToSvgAnimation = (
-  <div className="tc-scene flex items-center justify-center">
+  <div className="tc-scene tc-image-svg-scene flex items-center justify-center">
     <div className="relative w-[40px] h-[40px]">
 
       {/* IMAGE */}
