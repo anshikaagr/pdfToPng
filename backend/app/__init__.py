@@ -61,6 +61,7 @@ def create_app():
     from blueprints.merge_pdf import merge_pdf_bp
     from blueprints.split_pdf import split_pdf_bp
     from blueprints.watermark import watermark_bp
+    from blueprints.sign import sign_bp
     from blueprints.markdown import markdown_bp
 
     app.register_blueprint(pdf_bp)
@@ -75,6 +76,7 @@ def create_app():
     app.register_blueprint(merge_pdf_bp)
     app.register_blueprint(split_pdf_bp)
     app.register_blueprint(watermark_bp)
+    app.register_blueprint(sign_bp)
     app.register_blueprint(markdown_bp)
 
     return app
